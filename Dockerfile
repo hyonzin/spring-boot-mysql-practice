@@ -1,9 +1,15 @@
-# Start with a base image containing Java runtime
-FROM java:9
+FROM openjdk:11-jdk as builder
+#WORKDIR /build
+WORKDIR /app
 
-# Make port 8080 available to the world outside this container
+
+
 EXPOSE 8080
-
-# Command
 CMD [ "sleep", "3000000" ]
+
+#FROM openjdk:11-jre-slim as app
+#WORKDIR /app
+#
+#EXPOSE 8080
+#CMD [ "sleep", "3000000" ]
 
