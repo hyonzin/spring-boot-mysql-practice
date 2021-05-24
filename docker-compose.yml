@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    command: --lower_case_table_names=1
+    container_name: autumn-db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=autumn
+      - MYSQL_ROOT_PASSWORD=autumn
+      - TZ=Asia/Seoul
+
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - /Users/Shared/data/autumn-mysql:/var/lib/mysql
+      - ./db_script:/root/script
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-pautumn"]
+      timeout: 20s
+      retries: 10
+  app:
+    build: .
+    container_name: autumn-app
+    ports:
+      - 8080:8080
+    depends_on:
+      db:
+        condition: service_healthy
+  
